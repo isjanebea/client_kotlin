@@ -1,5 +1,6 @@
 package pocClientesCreditas
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -10,12 +11,15 @@ val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiYmlhIiwiX2lkIjoiMS
 
 
 @SpringBootApplication
-class PocClientApplication {
+class PocClientApplication(
+	@Value("\${apits.users.url}")
+	private val baseUrl: String
+) {
 	@Bean
 	fun webClient( builder: WebClient.Builder): WebClient {
 
 		return builder
-			.baseUrl(baseUrl)
+			.baseUrl(this.baseUrl)
 			.defaultHeader("authorization", "Baerer $token")
 			.defaultHeader("User-Agent",  "webClient test")
 			.build()

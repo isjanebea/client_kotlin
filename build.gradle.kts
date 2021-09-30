@@ -30,7 +30,8 @@ dependencies {
 	implementation("com.squareup.okhttp3:okhttp")
 	implementation("com.squareup.okhttp3:logging-interceptor")
 
-
+	implementation("com.squareup.retrofit2:retrofit:2.9.0")
+	implementation ("com.squareup.retrofit2:converter-gson:2.2.0")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
@@ -49,4 +50,5 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	include("**webClientServiceTest::java.class")
 }
