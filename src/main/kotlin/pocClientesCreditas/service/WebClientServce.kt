@@ -19,12 +19,10 @@ import java.io.IOException
 
 @Service
 class webClientService(
-    val gson: Gson = Gson()
+    val gson: Gson = Gson(),
+    val webClient: WebClient
 ) {
 
-
-    @Autowired
-    private lateinit var webClient: WebClient
 
     // aqui seria sincrono
     fun requestByIdSincrono(id: String): WebClientUserResponseById? {
