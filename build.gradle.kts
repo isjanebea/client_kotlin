@@ -50,5 +50,4 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-	include("**webClientServiceTest::java.class")
 }

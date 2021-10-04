@@ -6,7 +6,9 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.bodyToMono
 import org.springframework.web.reactive.function.client.toEntityList
+import pocClientesCreditas.baseUrl
 import pocClientesCreditas.controller.request.WebClientRequestUser
 import pocClientesCreditas.controller.response.OkHttpClientUserResponseById
 import pocClientesCreditas.controller.response.WebClientUserResponseById
@@ -45,6 +47,11 @@ class webClientService(
         return null
     }
 
+    fun requestByIdTest(id: String) = WebClient.create(baseUrl)
+        .get()
+        .uri("/$id")
+        .retrieve()
+        .bodyToMono(WebClientRequestUser::class.java)
 
 
     fun requestByIdAscincrono(id: String) {

@@ -1,42 +1,47 @@
 package pocClientesCreditas.service
 
-import org.assertj.core.api.Assertions
-
-
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import com.fasterxml.jackson.databind.ObjectMapper
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.jupiter.api.*
 import org.junit.runner.RunWith
-
-import org.junit.runners.MethodSorters
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.ApplicationContext
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.test.web.reactive.server.WebTestClient
-import pocClientesCreditas.controller.WebClientController
+import pocClientesCreditas.model.UserModelWebClient
+import org.junit.jupiter.api.Assertions.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class webClientServiceTest {
+class webClientServiceTest(
+    private var objectMapper: ObjectMapper = ObjectMapper()
+) {
 
-    @Autowired
-    private val context: ApplicationContext? = null
-    @Autowired
-    private val controller: WebClientController? = null
+    private lateinit var mockServer: MockWebServer
+    private lateinit var webClientService: webClientService
+    @BeforeEach
+    fun setup() {
+        mockServer = MockWebServer()
+        mockServer.start(8081)
+    }
 
-    var testClient = WebTestClient.bindToApplicationContext(context!!)
-        .build()
-    var webTestClient = WebTestClient.bindToController(controller).build()
+    @AfterEach
+    fun tearDown() {
+        mockServer.shutdown()
+    }
+
 
     @Test
-    fun `shold to expected status code is ok`() {
-         webTestClient
-            .get()
-            .uri("/")
-            .exchange()
-            .expectStatus().isOk()
-             .expectBody()
-             .jsonPath("$.name").isEqualTo("Bea");
+    fun `deve retornar um usuario`() {
+          var User = UserModelWebClient("1", "Test")
+            mockServer.enqueue(MockResponse().setBody(
+                objectMapper.writeValueAsString(User)
+            ).addHeader(
+                "Content-Type", "applciation/json"
+            ))
+
+       var response = webClientService.requestByIdSincrono("1")
+
+        assertEquals(User, response)
     }
 
 }
