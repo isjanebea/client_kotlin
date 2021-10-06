@@ -36,6 +36,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("com.squareup.okhttp3:mockwebserver")
+	testImplementation("io.mockk:mockk:1.10.6")
 
 
 

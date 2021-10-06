@@ -3,6 +3,7 @@ package pocClientesCreditas.service
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import pocClientesCreditas.baseUrl
 import pocClientesCreditas.controller.request.OkHttpRequestUser
@@ -13,7 +14,7 @@ import java.io.IOException
 @Service
 class OkhttpClientService(
     private val client: OkHttpClient = OkHttpClient(),
-    private val gson: Gson = Gson()
+    private val gson: Gson = Gson(),
 ) {
 
     fun reuestAll(): List<OkHttpRequestUser> {

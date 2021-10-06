@@ -16,40 +16,26 @@ import pocClientesCreditas.model.UserModelWebClient
 import reactor.core.publisher.Mono
 import java.io.IOException
 
+/*
+Preciso injetar as dependencias, utilizando injecao de dependencia por parametros
+
+*/
 
 @Service
-class webClientService(
-    val gson: Gson = Gson(),
+class WebClientService(
     val webClient: WebClient
 ) {
 
 
     // aqui seria sincrono
-    fun requestByIdSincrono(id: String): WebClientUserResponseById? {
-        var entityMono: Mono<ResponseEntity<WebClientRequestUser>> = webClient // aqui execulta a requisicao
+    fun requestByIdSincrono(id: String) = webClient // aqui execulta a requisicao
             .get()
-            .uri("/$id")
+            .uri("/{id}", id)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .toEntity(WebClientRequestUser::class.java)
+            .bodyToMono(WebClientRequestUser::class.java)
+            .block()
 
-
-
-        entityMono.block()?.let { responseEntity ->
-             if (responseEntity.statusCodeValue != 200) throw IOException("Usuario $id nao encontrado!")
-            return  WebClientUserResponseById(
-                id=responseEntity.body!!._id,
-                name=responseEntity.body!!.name
-            )
-        }
-        return null
-    }
-
-    fun requestByIdTest(id: String) = WebClient.create(baseUrl)
-        .get()
-        .uri("/$id")
-        .retrieve()
-        .bodyToMono(WebClientRequestUser::class.java)
 
 
     fun requestByIdAscincrono(id: String) {

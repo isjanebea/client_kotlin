@@ -2,14 +2,13 @@ package pocClientesCreditas.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.reactive.function.client.WebClient
-import pocClientesCreditas.service.webClientService
+import pocClientesCreditas.service.WebClientService
 
 
 @RestController
 @RequestMapping("web_client")
 class WebClientController(
-   val webClientService: webClientService = webClientService()
+   val webClientService: WebClientService
 ) {
 
     @GetMapping("/")
