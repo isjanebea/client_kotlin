@@ -1,29 +1,34 @@
 package pocClientesCreditas
 
-import org.springframework.beans.factory.annotation.Value
+import okhttp3.OkHttpClient
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.context.annotation.Bean
+
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.http.HttpHeaders.*
 
 val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiYmlhIiwiX2lkIjoiMSIsImlhdCI6MTYzMjc1MjA5MywiZXhwIjoxNjMzMzU2ODkzfQ.-E3r47xeJxLXUdUoj-NJAKQPSS20p8C3VSGVUQqoub8"
-val baseUrl = "http://localhost:3000"
+const val baseUrl = "http://localhost:3000"
 
 
 @SpringBootApplication
+@EnableFeignClients
 class PocClientApplication(
-	@Value("\${apits.users.url}")
-	private val baseUrl: String
 ) {
 	@Bean
 	fun webClient( builder: WebClient.Builder): WebClient {
 
 		return builder
-			.baseUrl(this.baseUrl)
-			.defaultHeader("authorization", "Baerer $token")
-			.defaultHeader("User-Agent",  "webClient test")
+			.baseUrl(baseUrl)
+			.defaultHeader(AUTHORIZATION, "Baerer $token")
+			.defaultHeader(USER_AGENT,  "WebClient")
 			.build()
 	}
+
+	@Bean
+	fun okHttpClient () = OkHttpClient()
 }
 
 fun main(args: Array<String>) {

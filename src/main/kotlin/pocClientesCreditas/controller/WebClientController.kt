@@ -2,7 +2,11 @@ package pocClientesCreditas.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import pocClientesCreditas.controller.request.PutRequest
+import pocClientesCreditas.model.UserModelWebClient
 import pocClientesCreditas.service.WebClientService
+import java.io.File
 
 
 @RestController
@@ -11,14 +15,22 @@ class WebClientController(
    val webClientService: WebClientService
 ) {
 
-    @GetMapping("/")
-    fun getAll() = webClientService.requestAll()
+
 
     @GetMapping("sync/{id}")
-    fun getSincrono(@PathVariable id: String) = webClientService.requestByIdSincrono(id)
+    fun getSincrono(@PathVariable id: String) = webClientService.getById(id)
+
+    @PostMapping("sync/create")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun create(@RequestBody body: UserModelWebClient) = webClientService.create(body)
+
+    @PostMapping("sync/file")
+    fun sendFile(@RequestParam file: MultipartFile) = webClientService.sendFile(file)
 
 
-    @GetMapping("async/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun getAssincrono(@PathVariable id: String) = webClientService.requestByIdAscincrono(id)
+    @DeleteMapping("sync/delete")
+    fun deleteUser(@RequestParam id: String) = webClientService.removeUser(id)
+
+    @PutMapping("sync/update")
+    fun updateUser(@RequestParam id: String, body: PutRequest) = webClientService.updateUser(id, body)
 }

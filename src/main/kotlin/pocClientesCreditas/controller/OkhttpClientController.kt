@@ -8,7 +8,7 @@ import pocClientesCreditas.service.OkhttpClientService
 @RestController
 @RequestMapping("okhttp")
 class OkhttpClientController(
-    private val okhttpClientService: OkhttpClientService = OkhttpClientService()
+    private val okhttpClientService: OkhttpClientService
 ) {
     @GetMapping("sync")
     fun getAll() = okhttpClientService.reuestAll()

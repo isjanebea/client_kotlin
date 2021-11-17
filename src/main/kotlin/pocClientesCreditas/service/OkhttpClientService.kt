@@ -3,7 +3,6 @@ package pocClientesCreditas.service
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import pocClientesCreditas.baseUrl
 import pocClientesCreditas.controller.request.OkHttpRequestUser
@@ -13,7 +12,7 @@ import java.io.IOException
 
 @Service
 class OkhttpClientService(
-    private val client: OkHttpClient = OkHttpClient(),
+    private val client: OkHttpClient,
     private val gson: Gson = Gson(),
 ) {
 
@@ -56,10 +55,10 @@ class OkhttpClientService(
             // converter para uma instancia
 
            var result: OkHttpRequestUser = gson  // json parse
-                .fromJson(
-                    response.body()!!.string(),  // response body
-                    object : TypeToken<OkHttpRequestUser>() {}.type // typeOf
-                )
+                   .fromJson(
+               response.body()!!.string(),  // response body
+               object : TypeToken<OkHttpRequestUser>() {}.type // typeOf
+           )
 
             return OkHttpClientUserResponseById(
                 id= result._id,
@@ -99,6 +98,21 @@ class OkhttpClientService(
     }
 
     // post de maneira sincrona
+    fun create(user: OkHttpRequestUser): Unit {
+        val JSON = MediaType.get("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, gson.toJson(user))
+
+        val request = Request.Builder()
+            .url("$baseUrl/create")
+            .post(body)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            // ...
+        }
+    }
+
 
     // post de maneira assincrona
 }

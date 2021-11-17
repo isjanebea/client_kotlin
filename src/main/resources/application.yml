@@ -4,3 +4,7 @@ server:
 apits:
   users:
     url: "http://localhost:3000"
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled=false:
